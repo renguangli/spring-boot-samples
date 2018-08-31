@@ -2,7 +2,7 @@ package com.renguangli.springbootmail;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -28,17 +28,11 @@ public class Mail {
 
     private boolean success = true;
 
-    public Mail(){}
+    private long sendTime;
 
-    public Mail(Integer mailId, String username, String[] to, String subject, String text, Date sendDate, boolean success) {
-        this.mailId = mailId;
-        this.username = username;
-        this.to = to;
-        this.subject = subject;
-        this.text = text;
-        this.sendDate = sendDate;
-        this.success = success;
-    }
+    private int retry;
+
+    public Mail(){}
 
     public Integer getMailId() {
         return mailId;
@@ -96,16 +90,34 @@ public class Mail {
         this.success = success;
     }
 
+    public long getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(long sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public int getRetry() {
+        return retry;
+    }
+
+    public void setRetry(int retry) {
+        this.retry = retry;
+    }
+
     @Override
     public String toString() {
         return "Mail{" +
                 "mailId=" + mailId +
                 ", username=" + username +
-                ", to=" + to +
+                ", to=" + Arrays.toString(to) +
                 ", subject=" + subject +
                 ", text=" + text +
                 ", sendDate=" + sendDate +
                 ", success=" + success +
+                ", sendTime=" + sendTime +
+                ", retry=" + retry +
                 "}";
     }
 }

@@ -26,12 +26,7 @@ public class SpringBootMailApplicationTests {
         mail.setSubject("test");
         mail.setText("test");
         mail.setSendDate(new Date());
-        try {
-            mailService.sendSimpleMail(mail);
-        } catch (Exception e) {
-            mail.setSuccess(false);
-            log.info("邮件发送失败");
-        }
+
         log.info("保存邮件发送记录");
 	}
 
