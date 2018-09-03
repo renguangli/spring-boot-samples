@@ -2,7 +2,7 @@ package com.renguangli.springbootmail;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Arrays;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -11,13 +11,18 @@ import java.util.Date;
  * @author renguangli 2018/8/29 17:32
  * @since JDK 1.8
  */
+@Entity
+@Table(name = "sb_mail")
 public class Mail {
 
-    private Integer mailId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     private String username;
 
-    private String[] to;
+    @Column(name = "send_to")
+    private String to;
 
     private String subject;
 
@@ -30,16 +35,16 @@ public class Mail {
 
     private long sendTime;
 
-    private int retry;
+    private String message = "邮件发送成功！";
 
     public Mail(){}
 
-    public Integer getMailId() {
-        return mailId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setMailId(Integer mailId) {
-        this.mailId = mailId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -50,11 +55,11 @@ public class Mail {
         this.username = username;
     }
 
-    public String[] getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(String... to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
@@ -98,26 +103,26 @@ public class Mail {
         this.sendTime = sendTime;
     }
 
-    public int getRetry() {
-        return retry;
+    public String getMessage() {
+        return message;
     }
 
-    public void setRetry(int retry) {
-        this.retry = retry;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
         return "Mail{" +
-                "mailId=" + mailId +
+                "id=" + id +
                 ", username=" + username +
-                ", to=" + Arrays.toString(to) +
+                ", to=" + to +
                 ", subject=" + subject +
                 ", text=" + text +
                 ", sendDate=" + sendDate +
                 ", success=" + success +
                 ", sendTime=" + sendTime +
-                ", retry=" + retry +
+                ", message=" + message +
                 "}";
     }
 }
