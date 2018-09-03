@@ -1,8 +1,10 @@
 package com.renguangli.mybatis.controller;
 
 import com.renguangli.mybatis.annotation.GetRestMapping;
+import com.renguangli.mybatis.mapper.UserMapper;
 import com.renguangli.mybatis.pojo.Result;
 import com.renguangli.mybatis.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,6 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
 
+    private final UserMapper userMapper;
+
+    @Autowired
+    public UserController(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @GetMapping(value = {"","/","/index"})
     public String index() {
         return "index";
@@ -22,6 +31,6 @@ public class UserController {
 
     @GetRestMapping("/users")
     public Result listUser(User user) {
-        return null;
+        return new Result(0, userMapper.list());
     }
 }
