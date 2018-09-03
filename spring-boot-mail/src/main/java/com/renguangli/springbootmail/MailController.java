@@ -1,10 +1,13 @@
 package com.renguangli.springbootmail;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * MailController
@@ -12,17 +15,29 @@ import java.util.Date;
  * @author renguangli 2018/8/29 17:22
  * @since JDK 1.8
  */
-
-@RestController
+@Controller
 public class MailController {
 
     @Resource
     private MailService mailService;
 
-    @GetMapping("/mail")
+    @GetMapping(value = {"", "/"})
+    public String index() {
+        return "index";
+    }
+
+    @ResponseBody
+    @GetMapping("/mails")
+    public Result listMail(int page, int limit) {
+        Pageable pageable = new PageRequest(page - 1, limit);
+        Page<Mail> data = mailService.listMail(pageable, null);
+        return new Result(data.getContent(), data.getTotalElements());
+    }
+
+    @ResponseBody
+    @GetMapping("/mail/send")
     public String sendSimpleMail(Mail mail) {
-        mail.setSendDate(new Date());
-        mailService.sendSimpleMail(mail);
+        mailService.sendAndSave(mail);
         return super.toString();
     }
 

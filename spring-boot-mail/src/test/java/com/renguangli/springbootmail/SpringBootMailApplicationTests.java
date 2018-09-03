@@ -22,7 +22,7 @@ public class SpringBootMailApplicationTests {
 	@Test
 	public void contextLoads() {
         Mail mail = new Mail();
-        mail.setTo("211887977@qq.com", "renguangli@bonc.com.cn");
+        mail.setTo("211887977@qq.com");
         mail.setSubject("test");
         mail.setText("test");
         mail.setSendDate(new Date());

@@ -1,5 +1,10 @@
 package com.renguangli.springbootmail;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
 /**
  * MailService
  *
@@ -8,6 +13,10 @@ package com.renguangli.springbootmail;
  */
 public interface MailService {
 
-    void sendSimpleMail(Mail mail);
+    Page<Mail> listMail(Pageable pageable, Mail mail);
+
+    Mail sendSimpleMail(Mail mail);
+
+    void sendAndSave(Mail mail);
 
 }
