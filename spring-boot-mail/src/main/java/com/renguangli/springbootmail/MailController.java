@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -35,10 +36,9 @@ public class MailController {
     }
 
     @ResponseBody
-    @GetMapping("/mail/send")
-    public String sendSimpleMail(Mail mail) {
-        mailService.sendAndSave(mail);
-        return super.toString();
+    @PostMapping("/mail/send")
+    public boolean sendSimpleMail(Mail mail) {
+        return mailService.sendAndSave(mail);
     }
 
 }

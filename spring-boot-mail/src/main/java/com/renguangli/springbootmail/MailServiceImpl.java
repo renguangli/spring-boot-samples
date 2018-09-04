@@ -69,7 +69,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendAndSave(Mail mail) {
+    public boolean sendAndSave(Mail mail) {
         mail.setSendDate(new Date());
         long start = System.currentTimeMillis();
         mail = sendSimpleMail(mail);//发送邮件
@@ -77,6 +77,7 @@ public class MailServiceImpl implements MailService {
         //异步保存邮件发送日志
         Mail finalMail = mail;
         executorService.submit(() -> mailRepository.save(finalMail));
+        return mail.isSuccess();
     }
 
 }
