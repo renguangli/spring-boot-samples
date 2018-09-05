@@ -50,7 +50,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public Mail sendSimpleMail(Mail mail) {
+    public Mail sendSimpleMail(Mail mail) throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
         mail.setSendDate(new Date());
         message.setFrom(from);
@@ -63,13 +63,14 @@ public class MailServiceImpl implements MailService {
         } catch (Exception e) {
             mail.setSuccess(false);
             mail.setMessage(e.getMessage());
-            log.error("邮件发送失败,{}", e.getMessage());
+            log.error("failed to send mail[{}],{}", mail, e.getMessage());
+            throw new Exception(e.getMessage(), e);
         }
         return mail;
     }
 
     @Override
-    public boolean sendAndSave(Mail mail) {
+    public void sendAndSave(Mail mail) throws Exception {
         mail.setSendDate(new Date());
         long start = System.currentTimeMillis();
         mail = sendSimpleMail(mail);//发送邮件
@@ -77,7 +78,11 @@ public class MailServiceImpl implements MailService {
         //异步保存邮件发送日志
         Mail finalMail = mail;
         executorService.submit(() -> mailRepository.save(finalMail));
-        return mail.isSuccess();
+    }
+
+    @Override
+    public void deleteByIdIn(Integer[] ids) {
+        mailRepository.deleteByIdIn(ids);
     }
 
 }

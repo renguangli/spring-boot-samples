@@ -2,6 +2,7 @@ package com.renguangli.springbootmail;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * MailRepository
@@ -11,5 +12,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MailRepository extends JpaRepository<Mail, Integer> {
+
+    @Transactional
+    void deleteByIdIn(Integer[] ids);
 
 }

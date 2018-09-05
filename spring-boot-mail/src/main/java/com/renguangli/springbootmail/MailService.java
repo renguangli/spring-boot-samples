@@ -13,8 +13,10 @@ public interface MailService {
 
     Page<Mail> listMail(Pageable pageable, Mail mail);
 
-    Mail sendSimpleMail(Mail mail);
+    Mail sendSimpleMail(Mail mail) throws Exception;
 
-    boolean sendAndSave(Mail mail);
+    void sendAndSave(Mail mail) throws Exception;
+
+    void deleteByIdIn(Integer[] ids);
 
 }
