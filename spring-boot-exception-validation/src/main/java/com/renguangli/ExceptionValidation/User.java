@@ -1,5 +1,10 @@
 package com.renguangli.ExceptionValidation;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 /**
@@ -10,48 +15,79 @@ import java.time.LocalDateTime;
  */
 public class User {
 
+    /*
+        @AssertFalse 校验false
+        @AssertTrue 校验true
+        @DecimalMax(value=,inclusive=) 小于等于value，
+        inclusive=true,是小于等于
+        @DecimalMin(value=,inclusive=) 与上类似
+        @Max(value=) 小于等于value
+        @Min(value=) 大于等于value
+        @NotNull  检查Null
+        @Past  检查日期
+        @Pattern(regex=,flag=)  正则
+        @Size(min=, max=)  字符串，集合，map限制大小
+        @Valid 对po实体类进行校验
+
+     */
+
+    @NotNull(message = "用户ID不能为null！")
     private Integer userId;
 
-    private String name;
+    @Length(min = 6, max = 16, message = "用户名长度在6至16之间！")
+    private String username;
 
-    private Integer age;
+    private String password;
+
+    @Email(message = "邮箱格式不正确！")
+    private String email;
+
+    @Pattern(regexp = "^\\d{11}$", message = "手机格式不正确！")
+    private String telNo;
 
     private LocalDateTime birthday;
 
-    private boolean disabled;
-
     public User(){}
 
-    public User(Integer userId, String name, Integer age, LocalDateTime birthday, boolean disabled) {
-        this.userId = userId;
-        this.name = name;
-        this.age = age;
-        this.birthday = birthday;
-        this.disabled = disabled;
-    }
-
+    @NotNull
     public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(@NotNull Integer userId) {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelNo() {
+        return telNo;
+    }
+
+    public void setTelNo(String telNo) {
+        this.telNo = telNo;
     }
 
     public LocalDateTime getBirthday() {
@@ -62,23 +98,15 @@ public class User {
         this.birthday = birthday;
     }
 
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", name=" + name +
-                ", age=" + age +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", telNo='" + telNo + '\'' +
                 ", birthday=" + birthday +
-                ", disabled=" + disabled +
-                "}";
+                '}';
     }
-
 }
