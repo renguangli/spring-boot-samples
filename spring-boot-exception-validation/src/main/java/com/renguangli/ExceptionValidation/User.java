@@ -34,10 +34,13 @@ public class User {
     @NotNull(message = "用户ID不能为null！")
     private Integer userId;
 
-    @Length(min = 6, max = 16, message = "用户名长度在6至16之间！")
+    @Length(min = 6, max = 16, message = "用户名长度必须在6至16之间！")
     private String username;
 
+    @Length(min = 8, max = 16, message = "密码长度必须在8至16之间！")
     private String password;
+
+    private int age;
 
     @Email(message = "邮箱格式不正确！")
     private String email;
@@ -54,7 +57,7 @@ public class User {
         return userId;
     }
 
-    public void setUserId(@NotNull Integer userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -72,6 +75,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getEmail() {
@@ -104,6 +115,7 @@ public class User {
                 "userId=" + userId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", age='" + age + '\'' +
                 ", email='" + email + '\'' +
                 ", telNo='" + telNo + '\'' +
                 ", birthday=" + birthday +
