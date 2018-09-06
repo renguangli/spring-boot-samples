@@ -1,5 +1,7 @@
 package com.renguangli.ExceptionValidation;
 
+import com.renguangli.ExceptionValidation.common.Code;
+import com.renguangli.ExceptionValidation.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,17 +19,13 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /**
-     * 拦截 CommonException 的异常
-     * @param e Exception
-     * @return aa
-     */
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result exceptionHandler(Exception e){
         log.error(e.getMessage());
-        return new Result(5000, e.getMessage());
+        return new Result(Code.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
     }
+
     /**
      * 拦截 CommonException 的异常
      * @param e Exception
@@ -36,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalStateException.class)
     @ResponseBody
     public Result illegalStateExceptionHandler(IllegalStateException e){
-        return new Result(5000, "参数类型错误！");
+        return new Result(Code.INTERNAL_SERVER_ERROR.getCode(), "参数类型错误！" + e.getMessage());
     }
 
 }
