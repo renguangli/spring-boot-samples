@@ -1,4 +1,4 @@
-package com.renguangli.ExceptionValidation;
+package com.renguangli.exceptionValidation;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -30,9 +30,7 @@ public class User {
         @Valid 对po实体类进行校验
 
      */
-
-    @NotNull(message = "用户ID不能为null！")
-    private Integer userId;
+    private int userId;
 
     @Length(min = 6, max = 16, message = "用户名长度必须在6至16之间！")
     private String username;
@@ -113,12 +111,12 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", age='" + age + '\'' +
-                ", email='" + email + '\'' +
-                ", telNo='" + telNo + '\'' +
+                ", username=" + username +
+                ", password=" + password +
+                ", age=" + age +
+                ", email=" + email +
+                ", telNo=" + telNo +
                 ", birthday=" + birthday +
-                '}';
+                "}";
     }
 }

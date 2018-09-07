@@ -1,24 +1,28 @@
-package com.renguangli.ExceptionValidation;
+package com.renguangli.exceptionValidation;
 
-import org.hibernate.validator.constraints.Length;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 /*
  *
  * Created by renguangli at 2018/9/1 13:31
  * @since JDK1.8
  */
-@Validated
 @RestController
 public class UserController {
 
     @GetMapping(value = {"", "/"})
-    public User test(@Valid User user, @Size(min = 12) int length) {
+    public User user(@Valid User user) {
         return user;
+    }
+
+    @GetMapping(value = {"user"})
+    public Integer user(Integer id) {
+        if (id == null) {
+            throw new NullPointerException("id不能为null");
+        }
+        return id;
     }
 }

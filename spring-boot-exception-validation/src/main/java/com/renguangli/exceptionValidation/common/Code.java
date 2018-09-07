@@ -1,4 +1,4 @@
-package com.renguangli.ExceptionValidation.common;
+package com.renguangli.exceptionValidation.common;
 
 /*
  * 通用返回码
@@ -7,9 +7,12 @@ package com.renguangli.ExceptionValidation.common;
  */
 public enum Code {
 
-    SUCCESS(0,"success"),
+    SUCCESS(0, "Success"),
 
-    INTERNAL_SERVER_ERROR(5000,"internal server error");
+    BAD_REQUEST(4000, "Bad Request"),
+
+    INTERNAL_SERVER_ERROR(5000, "Internal Server Error");
+
 
     private final int code;
 
@@ -27,4 +30,13 @@ public enum Code {
     public String getMessage(){
         return message;
     }
+
+    @Override
+    public String toString() {
+        return "Code{" +
+                "code=" + code +
+                ", message=" + message +
+                "}";
+    }
+
 }

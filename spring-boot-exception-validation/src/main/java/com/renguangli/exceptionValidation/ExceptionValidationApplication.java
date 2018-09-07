@@ -1,4 +1,4 @@
-package com.renguangli.ExceptionValidation;
+package com.renguangli.exceptionValidation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,4 +9,5 @@ public class ExceptionValidationApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ExceptionValidationApplication.class, args);
 	}
+
 }

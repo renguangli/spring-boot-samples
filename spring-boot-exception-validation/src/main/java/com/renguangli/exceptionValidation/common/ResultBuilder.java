@@ -1,4 +1,4 @@
-package com.renguangli.ExceptionValidation.common;
+package com.renguangli.exceptionValidation.common;
 
 
 /*
