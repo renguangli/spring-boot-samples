@@ -5,7 +5,6 @@ import com.renguangli.exceptionValidation.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.ClassUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -40,10 +39,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Result methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e){
-        Class<?> requiredType = e.getRequiredType();
-        String parameterName = e.getParameter().getParameterName();
-        String message = "[" + parameterName + "]参数类型错误，请传入" + ClassUtils.getQualifiedName(requiredType) + "类型参数！";
-        return new Result(Code.BAD_REQUEST.getCode(), message);
+        return new Result(Code.BAD_REQUEST.getCode(), e.getMessage());
     }
 
     /**
@@ -60,6 +56,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e){
+        log.error(Code.INTERNAL_SERVER_ERROR.getMessage() + " - " + e.getMessage());
         return new Result(Code.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
     }
 
