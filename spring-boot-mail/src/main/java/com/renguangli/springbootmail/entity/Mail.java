@@ -1,8 +1,15 @@
-package com.renguangli.springbootmail;
+package com.renguangli.springbootmail.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -21,11 +28,14 @@ public class Mail {
 
     private String username;
 
+    @Email(message = "邮件格式不正确！")
     @Column(name = "send_to")
     private String to;
 
+    @NotBlank(message = "邮件标题不能为空！")
     private String subject;
 
+    @NotBlank(message = "邮件内容不能为空！")
     private String text;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

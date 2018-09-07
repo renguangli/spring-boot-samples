@@ -1,5 +1,7 @@
 package com.renguangli.springbootmail;
 
+import com.renguangli.springbootmail.entity.Mail;
+import com.renguangli.springbootmail.service.MailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

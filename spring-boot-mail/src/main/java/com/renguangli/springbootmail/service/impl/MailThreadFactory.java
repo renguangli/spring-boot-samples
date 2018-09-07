@@ -1,4 +1,4 @@
-package com.renguangli.springbootmail;
+package com.renguangli.springbootmail.service.impl;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

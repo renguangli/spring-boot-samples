@@ -1,5 +1,6 @@
-package com.renguangli.springbootmail;
+package com.renguangli.springbootmail.repository;
 
+import com.renguangli.springbootmail.entity.Mail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

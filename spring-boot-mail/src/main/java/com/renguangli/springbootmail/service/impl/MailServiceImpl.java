@@ -1,5 +1,8 @@
-package com.renguangli.springbootmail;
+package com.renguangli.springbootmail.service.impl;
 
+import com.renguangli.springbootmail.entity.Mail;
+import com.renguangli.springbootmail.repository.MailRepository;
+import com.renguangli.springbootmail.service.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +53,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public Mail sendSimpleMail(Mail mail) throws Exception {
+    public Mail sendSimpleMail(Mail mail) {
         SimpleMailMessage message = new SimpleMailMessage();
-        mail.setSendDate(new Date());
         message.setFrom(from);
         message.setSubject(mail.getSubject());
         message.setText(mail.getText());
@@ -64,20 +66,22 @@ public class MailServiceImpl implements MailService {
             mail.setSuccess(false);
             mail.setMessage(e.getMessage());
             log.error("failed to send mail[{}],{}", mail, e.getMessage());
-            throw new Exception(e.getMessage(), e);
         }
         return mail;
     }
 
     @Override
     public void sendAndSave(Mail mail) throws Exception {
-        mail.setSendDate(new Date());
+        mail.setSendDate(new Date()); //
         long start = System.currentTimeMillis();
         mail = sendSimpleMail(mail);//发送邮件
         mail.setSendTime(System.currentTimeMillis() - start);
         //异步保存邮件发送日志
         Mail finalMail = mail;
         executorService.submit(() -> mailRepository.save(finalMail));
+        if (!mail.isSuccess()) {
+            throw new Exception(mail.getMessage());
+        }
     }
 
     @Override

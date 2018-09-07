@@ -44,7 +44,7 @@
                 </div>
                 <div class="layui-tab-item">
                     <div style="margin-bottom: 10px;">
-                        <form action="#" class="layui-form">
+                        <div class="layui-form">
                             <div class="layui-form-item layui-form-text">
                                 <label class="layui-form-label">接收者</label>
                                 <div class="layui-input-block">
@@ -69,7 +69,7 @@
                                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,8 +119,11 @@ layui.use(['table', "element", "jquery"], function(){
                 ids.push(mail.id);
             });
             layer.confirm('真的删除行么', function(index){
-                var params = {ids:ids};
-                rportal.request(ctx + "mails/batchDelete", "POST", params, "删除");
+                var params = {
+                    _method: "DELETE",
+                    ids:ids
+                };
+                request(ctx + "mails", "POST", params, "邮件日志删除");
                 layer.close(index);
             });
         }
@@ -139,29 +142,38 @@ layui.use(['table', "element", "jquery"], function(){
             subject:$("#subject").val(),
             text:$("#text").val()
         };
-        alert();
-        request("mail/send", "POST", params, "邮件发送")
+        request("mail", "POST", params, "邮件发送")
     });
 
-    // 向后台发送请求，增删改查
+    // 向后台发送请求
     function request(url, method, params, msg) {
         //loading层
-        layer.msg(msg + '中', {
+        var i = layer.msg(msg + '中', {
             icon: 16
             ,shade: 0.01
         });
         $.ajax({
-            url:ctx + url,
+            url:url,
             type:method,
             dataType:'json',
             data: params,
             success:function(data){
-                if (data) {
+                layer.close(i);
+                if (data.code === 0) {
+                    refresh();
                     layer.msg(msg + "成功！");
                 } else {
-                    layer.msg(msg + "失败！")
+                    layer.open({
+                        type:1,
+                        title: msg + "失败！",
+                        area: ['350px', '200px'],
+                        content: '<div style="padding: 20px;">' + data.message + '</div>',
+                        btn: ['确定'],
+                        yes: function (index) {
+                            layer.close(index);
+                        }
+                    });
                 }
-                layer.closeAll('loading');
             },
             error() {
                 layer.msg(msg + "失败！");

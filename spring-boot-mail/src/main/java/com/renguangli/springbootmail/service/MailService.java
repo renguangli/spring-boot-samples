@@ -1,5 +1,6 @@
-package com.renguangli.springbootmail;
+package com.renguangli.springbootmail.service;
 
+import com.renguangli.springbootmail.entity.Mail;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +14,7 @@ public interface MailService {
 
     Page<Mail> listMail(Pageable pageable, Mail mail);
 
-    Mail sendSimpleMail(Mail mail) throws Exception;
+    Mail sendSimpleMail(Mail mail);
 
     void sendAndSave(Mail mail) throws Exception;
 
