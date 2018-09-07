@@ -11,6 +11,8 @@ public enum Code {
 
     BAD_REQUEST(4000, "Bad Request"),
 
+    NOT_SUPPORTED_METHOD(4005, "Tot Supported Method"),
+
     INTERNAL_SERVER_ERROR(5000, "Internal Server Error");
 
 

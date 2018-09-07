@@ -4,12 +4,16 @@ import com.renguangli.exceptionValidation.common.Code;
 import com.renguangli.exceptionValidation.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.Set;
 
 
 /*
@@ -21,6 +25,15 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    /**
+     * 请求方法不支持异常处理
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
+        Set<HttpMethod> supportedHttpMethods = e.getSupportedHttpMethods();
+        return new Result(Code.NOT_SUPPORTED_METHOD.getCode(), e.getMessage() + "; Only supported " + supportedHttpMethods + " methods.");
+    }
 
     /**
      * 防止用户传入不正确的参数类型
