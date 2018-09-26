@@ -1,7 +1,5 @@
 package com.renguangli.exceptionValidation;
 
-import com.renguangli.exceptionValidation.common.Code;
-import com.renguangli.exceptionValidation.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -31,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
         Set<HttpMethod> supportedHttpMethods = e.getSupportedHttpMethods();
-        return new Result(Code.NOT_SUPPORTED_METHOD.getCode(), e.getMessage() + "; Only supported " + supportedHttpMethods + " methods.");
+        return new Result(e.getMessage() + "; Only supported " + supportedHttpMethods + " methods.");
     }
 
     /**
@@ -39,7 +37,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Result methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e){
-        return new Result(Code.BAD_REQUEST.getCode(), e.getMessage());
+        return new Result(e.getMessage());
     }
 
     /**
@@ -48,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public Result bindExceptionHandler(BindException e){
         FieldError fieldError = e.getBindingResult().getFieldError();
-        return new Result(Code.BAD_REQUEST.getCode(), fieldError.getDefaultMessage());
+        return new Result(fieldError.getDefaultMessage());
     }
 
     /**
@@ -56,8 +54,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e){
-        log.error(Code.INTERNAL_SERVER_ERROR.getMessage() + " - " + e.getMessage());
-        return new Result(Code.INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
+        log.error(e.getMessage());
+        return new Result(e.getMessage());
     }
 
 }
