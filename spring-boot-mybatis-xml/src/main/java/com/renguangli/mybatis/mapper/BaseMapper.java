@@ -1,5 +1,7 @@
 package com.renguangli.mybatis.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -10,17 +12,17 @@ import java.util.List;
  */
 public interface BaseMapper<T, ID> {
 
-    T get(ID id);
+    T get(@Param("id") ID id);
 
     List<T> list();
 
-    int save(T pojo);
+    int save(@Param("pojo") T pojo);
 
-    int batchSave(List<T> pojos);
+    int batchSave(@Param("pojos")List<T> pojos);
 
-    int delete(ID id);
+    int delete(@Param("id") ID id);
 
-    int batchDelete(ID[] ids);
+    int batchDelete(@Param("ids") ID[] ids);
 
-    int update(T pojo);
+    int update(@Param("pojo") T pojo);
 }

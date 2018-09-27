@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renguangli.mybatis.mapper.EmployeeMapper">
+
+    <select id="listEmployees" resultType="Employee">
+        select * from employee where 1=1
+        <if test="pojo.firstName != null and pojo.firstName != ''">
+            and first_name = #{pojo.firstName}
+        </if>
+        <if test="pojo.lastName != null and pojo.lastName != ''">
+            and last_name = #{pojo.lastName}
+        </if>
+        limit #{page},#{size}
+    </select>
+
+    <select id="get" resultType="Employee">
+        select * from employee where emp_no = #{id}
+    </select>
+
+    <select id="countEmployee" resultType="long">
+        select count(*) from employee where 1=1
+        <if test="pojo.firstName != null and pojo.firstName != ''">
+            and first_name = #{pojo.firstName}
+        </if>
+        <if test="pojo.lastName != null and pojo.lastName != ''">
+            and last_name = #{pojo.lastName}
+        </if>
+    </select>
+
+    <insert id="save">
+        insert into employee(emp_no,birth_date,first_name,last_name,gender,hire_date)
+        values(#{pojo.empNo},#{pojo.birthDate},#{pojo.firstName},#{pojo.lastName},#{pojo.gender},#{pojo.hireDate})
+    </insert>
+
+    <delete id="delete">
+        delete from employee where emp_no = #{id}
+    </delete>
+
+    <update id="update">
+        update employee
+        set last_name = #{pojo.lastName}
+        where emp_no = #{pojo.empNo}
+    </update>
+</mapper>
