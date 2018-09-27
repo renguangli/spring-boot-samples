@@ -38,7 +38,7 @@
                     <div style="margin-bottom: 10px;">
                         <input id="send-to" type="text" class="layui-input search-input " placeholder="请输入关键字" />
                         <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
-                        <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">批量删除</button>
+                        <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">删除</button>
                     </div>
                     <table id="mail" lay-filter="mail"></table>
                 </div>
@@ -78,7 +78,7 @@
 </div>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:inline="javascript">
-var ctx = /*[[@{/}]]*/ ''; //context-path
+var ctx = /*[[@{/}]]*/ "/"; //context-path
 layui.use(['table', "element", "jquery"], function(){
     var $ = layui.jquery,table = layui.table;
     var options = {
@@ -158,24 +158,27 @@ layui.use(['table', "element", "jquery"], function(){
             dataType:'json',
             data: params,
             success:function(data){
-                layer.close(i);
                 if (data.code === 0) {
-                    refresh();
-                    layer.msg(msg + "成功！");
-                } else {
-                    layer.open({
-                        type:1,
-                        title: msg + "失败！",
-                        area: ['350px', '200px'],
-                        content: '<div style="padding: 20px;">' + data.message + '</div>',
-                        btn: ['确定'],
-                        yes: function (index) {
-                            layer.close(index);
-                        }
-                    });
+                    layer.close(i);
+                    if (data.code === 0) {
+                        refresh();
+                        layer.msg(msg + "成功！");
+                        refresh();
+                    } else {
+                        layer.open({
+                            type: 1,
+                            title: msg + "失败！",
+                            area: ['350px', '200px'],
+                            content: '<div style="padding: 20px;">' + data.message + '</div>',
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
                 }
             },
-            error() {
+            error: function() {
                 layer.msg(msg + "失败！");
                 layer.closeAll('loading');
             }
