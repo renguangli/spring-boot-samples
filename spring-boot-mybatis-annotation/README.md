@@ -1,4 +1,4 @@
-## spring-boot-mybatis-xml
+## spring-boot-mybatis-annotation
 spring-boot集成mybatis。注解方式
 - 增
 - 删
