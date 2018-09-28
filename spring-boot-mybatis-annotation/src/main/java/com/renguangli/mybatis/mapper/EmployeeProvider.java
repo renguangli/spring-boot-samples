@@ -2,6 +2,8 @@ package com.renguangli.mybatis.mapper;
 
 import com.renguangli.mybatis.bean.Employee;
 
+import java.util.Map;
+
 /**
  * EmployeeProvider
  *
@@ -10,34 +12,38 @@ import com.renguangli.mybatis.bean.Employee;
  */
 public class EmployeeProvider {
 
-    public String listEmployees(Employee employee,int page, int size) {
+    public String listEmployees(Map<String, Object> params) {
+        Employee employee = (Employee) params.get("pojo");
         StringBuilder sql = new StringBuilder();
         sql.append("select * from employee where 1=1 ");
+
         String firsName = employee.getFirstName();
         if (firsName != null && !"".equals(firsName)) {
-            sql.append("and first_name = #{param1.firstName} ");
+            sql.append("and first_name = #{pojo.firstName} ");
         }
 
         String lastName = employee.getLastName();
         if (lastName != null && !"".equals(lastName)) {
-            sql.append("and last_name = #{param1.lastName} ");
+            sql.append("and last_name = #{pojo.lastName} ");
         }
 
-        sql.append("limit #{param2},#{param3}");
+        sql.append("limit #{page},#{size}");
         return sql.toString();
     }
 
-    public String countEmployees(Employee employee) {
+    public String countEmployees(Map<String, Object> params) {
+        Employee employee = (Employee) params.get("pojo");
         StringBuilder sql = new StringBuilder();
         sql.append("select count(*) from employee where 1=1 ");
+
         String firsName = employee.getFirstName();
         if (firsName != null && !"".equals(firsName)) {
-            sql.append("and first_name = #{param1.firstName} ");
+            sql.append("and first_name = #{pojo.firstName} ");
         }
 
         String lastName = employee.getLastName();
         if (lastName != null && !"".equals(lastName)) {
-            sql.append("and last_name = #{param1.lastName} ");
+            sql.append("and last_name = #{pojo.lastName} ");
         }
         return sql.toString();
     }

@@ -19,13 +19,17 @@ import java.util.List;
 public interface EmployeeMapper {
 
     @SelectProvider(type = EmployeeProvider.class, method = "listEmployees")
-    List<Employee> listEmployees(Employee employee, Integer page, Integer size);
+    List<Employee> listEmployees(@Param("pojo") Employee employee,
+                                 @Param("page") Integer page,
+                                 @Param("size") Integer size);
 
     @SelectProvider(type = EmployeeProvider.class, method = "countEmployees")
-    int countEmployees(Employee employee);
+    int countEmployees(@Param("pojo") Employee employee);
 
-    @Insert("select * from employee emp_no = #{param1}")
-    int saveEmployee(@Param("pojo")Employee employee);
+    @Insert("insert into employee " +
+            "(emp_no,first_name,last_name,gender,birth_date,hire_date) " +
+            "values(#{pojo.empNo},#{pojo.firstName},#{pojo.lastName},#{pojo.gender},#{pojo.birthDate},#{pojo.hireDate})")
+    int saveEmployee(@Param("pojo") Employee employee);
 
     @Select("select * from employee where emp_no = #{param1}")
     Employee getEmployee(Integer empNo);
