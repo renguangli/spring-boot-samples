@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot 集成 Spring Data Jpa 增删改查示例</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"/>
+    <script th:src="@{/layui/layui.js}"></script>
+    <style>
+        .search-input {
+            width: auto;
+            height: 30px;
+            margin-right: 10px;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-container">
+
+    <div class="layui-tab-content">
+        <h1>Spring Boot 集成 Spring Data Jpa 增删改查示例</h1>
+        <br/>
+        <div class="layui-tab-item layui-show">
+            <div>
+                <input id="username" type="text" class="layui-input search-input " placeholder="请输入关键字" />
+                <button class="layui-btn layui-btn-normal layui-btn-sm" id="query">查询</button>
+                <button class="layui-btn layui-btn-danger layui-btn-sm" id="del">删除</button>
+            </div>
+            <table id="user" lay-filter="user"></table>
+        </div>
+    </div>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script th:inline="javascript">
+var ctx = /*[[@{/}]]*/ "/"; //context-path
+layui.use(['table', "jquery"], function(){
+    var $ = layui.jquery,table = layui.table;
+    var options = {
+        elem: '#user',
+        url: ctx + "users",
+        where: {
+            name: $("#username").val()
+        },
+        page: {
+            curr: 1
+        },
+        cols: [
+            [
+                {type:'checkbox'},
+                {"field": "userId", "title": "用户编码", width:200},
+                {"field": "username", "title": "用户名"},
+                {"field": "password", "title": "密码"},
+                {"field": "createTime", "title": "创建时间"},
+                {"field": "sex", "title": "性别"},
+                {"field": "age", "title": "你那零"},
+                {"field": "success", "title": "操作", toolbar: '#toolbar', width:100, "align":"center"}
+            ]
+        ]
+    };
+    var tableIns = table.render(options);
+
+    $("#query").click(function () {
+        refresh();
+    });
+
+    $("#del").on("click", function () {
+        var checkStatus = table.checkStatus('mail'); //test即为基础参数id对应的值
+        if (checkStatus.data.length === 0) {
+            layer.msg("未选中数据行");
+        } else {
+            var ids = [];
+            $.each(checkStatus.data, function (i, mail) {
+                ids.push(mail.id);
+            });
+            layer.confirm('真的删除行么', function(index){
+                var params = {
+                    _method: "DELETE",
+                    ids:ids
+                };
+                request(ctx + "mails", "POST", params, "邮件日志删除");
+                layer.close(index);
+            });
+        }
+        // console.log(checkStatus.isAll ) //表格是否全选
+    });
+
+    // 重新加载数据
+    function refresh() {
+        options.where.name = $("#username").val();
+        tableIns.reload(options);
+    }
+
+    $("#send-mail").on("click", function () {
+        var params = {
+            to:$("#to").val(),
+            subject:$("#subject").val(),
+            text:$("#text").val()
+        };
+        request("mail", "POST", params, "邮件发送")
+    });
+
+    // 向后台发送请求
+    function request(url, method, params, msg) {
+        //loading层
+        var i = layer.msg(msg + '中', {
+            icon: 16
+            ,shade: 0.01
+        });
+        $.ajax({
+            url:url,
+            type:method,
+            dataType:'json',
+            data: params,
+            success:function(data){
+                if (data.code === 0) {
+                    layer.close(i);
+                    if (data.code === 0) {
+                        refresh();
+                        layer.msg(msg + "成功！");
+                        refresh();
+                    } else {
+                        layer.open({
+                            type: 1,
+                            title: msg + "失败！",
+                            area: ['350px', '200px'],
+                            content: '<div style="padding: 20px;">' + data.message + '</div>',
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                }
+            },
+            error: function() {
+                layer.msg(msg + "失败！");
+                layer.closeAll('loading');
+            }
+        });
+    }
+});
+</script>
+<script type="text/html" id="toolbar">
+    {{#  if(d.success){ }}
+    <span class="layui-btn layui-btn-normal layui-btn-xs">成功</span>
+    {{#  } else { }}
+    <span class="layui-btn layui-btn-danger layui-btn-xs">失败</span>
+    {{#  } }}
+</script>
+</body>
+</html>
+
+
