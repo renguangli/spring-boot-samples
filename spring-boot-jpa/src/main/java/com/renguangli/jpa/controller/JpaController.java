@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class JpaController {
 
-    @GetMapping("/")
+    @GetMapping("/pageView/user")
+    public String user() {
+        return "user";
+    }
+
+    @GetMapping(value = {"", "/", "/index"})
     public String index() {
         return "index";
     }

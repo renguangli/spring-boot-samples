@@ -1,7 +1,7 @@
 ## spring-boot-jpa
 spring-boot集成jpa
 - 增
-- 删
+- 删/批量删除
 - 改
 - 查
   * 根据id查

@@ -6,10 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /*
  *
@@ -21,6 +20,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
+    @GeneratedValue
     private Long userId;
 
     @Column(name = "username", length = 16, unique = true)
@@ -30,7 +30,8 @@ public class User {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime createTime;
+
+    private Date createTime;
 
     private char sex;
 
@@ -38,7 +39,7 @@ public class User {
 
     public User(){}
 
-    public User(String username, String password, LocalDateTime createTime, char sex, Integer age) {
+    public User(String username, String password, Date createTime, char sex, Integer age) {
         this.username = username;
         this.password = password;
         this.createTime = createTime;
@@ -70,11 +71,11 @@ public class User {
         this.password = password;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
