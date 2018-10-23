@@ -8,12 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.domain.Pageable;
-
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -66,6 +68,45 @@ public class MailServiceImpl implements MailService {
             mail.setSuccess(false);
             mail.setMessage(e.getMessage());
             log.error("failed to send mail[{}],{}", mail, e.getMessage());
+        }
+        return mail;
+    }
+
+    @Override
+    public Mail sendHtmlMail(Mail mail) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(mail.getTo());
+            helper.setSubject(mail.getSubject());
+            helper.setText(mail.getText(), true);
+
+            javaMailSender.send(message);
+            log.info("html 邮件已发送！");
+        } catch (MessagingException e) {
+            mail.setSuccess(false);
+            log.error("html 邮件发送时发生异常！", e);
+        }
+        return mail;
+    }
+
+    @Override
+    public Mail sendAttachMail(Mail mail) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(from);
+            helper.setTo(mail.getTo());
+            helper.setSubject(mail.getSubject());
+            helper.setText(mail.getText(), true);
+            helper.addAttachment(mail.getFile().getName(), mail.getFile());
+
+            javaMailSender.send(message);
+            log.info("带附件的邮件已发送！");
+        } catch (MessagingException e) {
+            mail.setSuccess(false);
+            log.error("带附件的邮件发送时发生异常！", e);
         }
         return mail;
     }

@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -37,6 +39,9 @@ public class Mail {
 
     @NotBlank(message = "邮件内容不能为空！")
     private String text;
+
+    @Transient
+    private File file;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendDate;
@@ -87,6 +92,14 @@ public class Mail {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public Date getSendDate() {

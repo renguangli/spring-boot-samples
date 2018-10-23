@@ -12,9 +12,13 @@ import org.springframework.data.domain.Pageable;
  */
 public interface MailService {
 
-    Page<Mail> listMail(Pageable pageable, Mail mail);
-
     Mail sendSimpleMail(Mail mail);
+
+    Mail sendHtmlMail(Mail mail);
+
+    Mail sendAttachMail(Mail mail);
+
+    Page<Mail> listMail(Pageable pageable, Mail mail);
 
     void sendAndSave(Mail mail) throws Exception;
 
