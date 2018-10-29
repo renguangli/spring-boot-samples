@@ -65,9 +65,4 @@ public class EmployeeController {
         return employeeMapper.update(employee);
     }
 
-    @GetMapping("")
-    public String index() {
-        return "index";
-    }
-
 }
