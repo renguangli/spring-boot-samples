@@ -1,11 +1,13 @@
 package com.renguangli.springbootpoi;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -17,21 +19,27 @@ import java.util.Map;
 @Controller
 public class PoiController {
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
+    @Resource
+    private ApiService apiService;
 
-    @PostMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile file) {
-        String mapping = "天:tian,下:xia,无:wu,敌:di";
-        List<Map<String, Object>> maps = PoiUtils.readExcel(file, mapping);
-        assert maps != null;
-        maps.forEach((map) -> {
-            map.forEach((key, value) -> {
-                System.out.println(key + "=" + value);
-            });
-        });
-        return "redirect:/";
+    @Value("${get-tenant-id.url}")
+    private String getTenantIdUrl;
+
+    @GetMapping("/")
+    public List<Map<String, Object>> lsitApis(HttpServletResponse response) {
+        String headingMapping = "TENANT_NAME:租户名称,TENANT_ID:租户ID,USERNAME:用户名称,API_PROVIDER:用户名ID,API_NAME:API名称,STATE:API状态,CONTEXT:API编码,API_VERSION:版本,VISIBILITY:可见性,VISIBLEROLES:可见租户,DESCRIPTION:描述,CREATED_TIME:创建时间";
+        List<Map<String, Object>> lsitApis = apiService.doListApis();
+        try (OutputStream os = response.getOutputStream();){
+            response.reset();//清空输出流
+            //下面是对中文文件名的处理
+            response.setCharacterEncoding("UTF-8");//设置相应内容的编码格式
+            response.setHeader("Content-Disposition","attachment;filename=APIS.xls");
+            response.setContentType("application/msexcel");//定义输出类型
+            PoiUtils.writeExcel(response, headingMapping, lsitApis);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,5 +1,8 @@
 package com.renguangli.springbootpoi;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -8,10 +11,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,7 +104,7 @@ public final class PoiUtils {
      * @return map
      */
     private static Map<String, String> toMap(String headerMapping) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         String[] mappings = headerMapping.split(",");
         for (String mapping : mappings) {
             String[] header = mapping.split(":");
@@ -108,8 +113,43 @@ public final class PoiUtils {
         return map;
     }
 
+    public static void writeExcel(HttpServletResponse response, String headerMapping, List<Map<String, Object>> data) {
+        Map<String, String> mapping = toMap(headerMapping);
+        try (HSSFWorkbook workbook = new HSSFWorkbook();){
+            // 添加 Worksheet
+            HSSFSheet sheet1 = workbook.createSheet("API列表");
+            // 添加表头
+            HSSFRow headRow = sheet1.createRow(0);    //创建第一行
+
+            int cellIndex = 0;
+            for (String value : mapping.values()) {
+                HSSFCell cell = headRow.createCell(cellIndex ++);
+                cell.setCellValue(value);
+            }
+
+            // 添加添加数据
+            for (int i = 1; i < data.size(); i++) {
+                HSSFRow dataRow = sheet1.createRow(i);
+                Map<String, Object> dataMap = data.get(i - 1);
+                int dataCellIndex = 0;
+                for (String key : mapping.keySet()) {
+                    HSSFCell cell = dataRow.createCell(dataCellIndex ++);
+                    Object value = dataMap.get(key);
+                    if (value != null) {
+                        cell.setCellValue(value.toString());
+                    } else {
+                        cell.setCellValue("");
+                    }
+                }
+            }
+            workbook.write(response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
-     * 判断Excel的版本,获取Workbook
+     * 判断 Excel 的版本,获取 Workbook
      * @param in {@link InputStream}
      * @return {@link Workbook}
      * @throws IOException IOException
