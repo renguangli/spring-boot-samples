@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- 添加命名空间 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>主页</title>
+</head>
+<body>
+
+<h2>Current User is <span th:text="${login_user}"></span></h2>
+
+<p>Welcome to index pages</p>
+
+<!-- js中的表达式 -->
+<script th:inline="javascript">
+    var ctx = /*[[@{/}]]*/ '';
+</script>
+</body>
+</html>
