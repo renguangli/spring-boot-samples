@@ -1,0 +1,3 @@
+# AutoConfigureCache auto-configuration imports
+org.springframework.boot.test.autoconfigure.core.AutoConfigureCache=\
+com.example.demo.DemoAutoConfigure
