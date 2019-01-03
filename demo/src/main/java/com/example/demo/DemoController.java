@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
@@ -13,6 +14,11 @@ public class DemoController {
 
     @GetMapping("/")
     public String helloSpringBoot() {
+        return "Hello Spring Boot";
+    }
+
+    @PostMapping("/user")
+    public String post() {
         return "Hello Spring Boot";
     }
 }
