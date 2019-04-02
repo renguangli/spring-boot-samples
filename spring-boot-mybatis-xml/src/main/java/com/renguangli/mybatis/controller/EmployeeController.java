@@ -2,7 +2,7 @@ package com.renguangli.mybatis.controller;
 
 import com.renguangli.mybatis.Result;
 import com.renguangli.mybatis.bean.Employee;
-import com.renguangli.mybatis.mapper.EmployeeMapper;
+import com.renguangli.mybatis.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +24,11 @@ import java.util.List;
 @RestController
 public class EmployeeController {
 
-    private final EmployeeMapper employeeMapper;
+    private final EmployeeService EmployeeService;
 
     @Autowired
-    public EmployeeController(EmployeeMapper employeeMapper) {
-        this.employeeMapper = employeeMapper;
+    public EmployeeController(EmployeeService EmployeeService) {
+        this.EmployeeService = EmployeeService;
     }
 
     @GetMapping("/employees")
@@ -36,14 +36,14 @@ public class EmployeeController {
                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
                                 @RequestParam(value = "size", defaultValue = "10") Integer size) {
         int offset = (page - 1) * size;
-        List<Employee> employees = employeeMapper.listEmployees(employee, offset, size);
-        long count = employeeMapper.countEmployee(employee);
+        List<Employee> employees = EmployeeService.listEmployees(employee, offset, size);
+        long count = EmployeeService.countEmployee(employee);
         return new Result(employees, count, page, size);
     }
 
     @GetMapping("/employee/{empNo}")
     public Employee getEmployee(@PathVariable("empNo") Integer empNo) {
-        Employee employee = employeeMapper.get(empNo);
+        Employee employee = EmployeeService.get(empNo);
         System.out.println(employee);
         return employee;
     }
@@ -52,17 +52,17 @@ public class EmployeeController {
     public int saveEmployee(Employee employee) {
         employee.setBirthDate(new Date());
         employee.setHireDate(new Date());
-        return employeeMapper.save(employee);
+        return EmployeeService.save(employee);
     }
 
     @DeleteMapping("/employee/{empNo}")
     public int deleteEmployee(@PathVariable("empNo") Integer empNo) {
-        return employeeMapper.delete(empNo);
+        return EmployeeService.delete(empNo);
     }
 
     @PutMapping("/employee")
     public int updateEmployee(Employee employee) {
-        return employeeMapper.update(employee);
+        return EmployeeService.update(employee);
     }
 
 }

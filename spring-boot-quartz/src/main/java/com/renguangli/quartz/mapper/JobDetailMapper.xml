@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renguangli.quartz.mapper.JobDetailMapper">
+
+    <select id="listJobDetails" resultType="jobDetail">
+        select qjd.SCHED_NAME,
+               qjd.JOB_NAME,
+               qjd.JOB_GROUP,
+               qjd.DESCRIPTION,
+               qjd.JOB_CLASS_NAME,
+               qt.TRIGGER_STATE JOBSTATE
+        from qrtz_job_details qjd,qrtz_triggers qt
+        where qjd.JOB_NAME = qt.JOB_NAME
+        and qjd.JOB_GROUP = qt.JOB_GROUP
+    </select>
+</mapper>
